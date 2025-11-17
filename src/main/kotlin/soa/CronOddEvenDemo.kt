@@ -111,6 +111,7 @@ class IntegrationApplication(
      */
     @Bean
     fun oddFlow(): IntegrationFlow =
+        // El filtro y lo relacionado con él ha sido eliminado.
         integrationFlow("oddChannel") {
             transform { obj: Int ->
                 logger.info("  ⚙️  Odd Transformer: {} → 'Number {}'", obj, obj)
@@ -162,7 +163,7 @@ class SomeService {
  */
 @MessagingGateway
 interface SendNumber {
-    @Gateway(requestChannel = "oddChannel") // Debería de ser "oddChannel", para enviar números negativos al canal impar
+    @Gateway(requestChannel = "oddChannel")
     fun sendNumber(number: Int)
 }
 

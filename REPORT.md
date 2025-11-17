@@ -18,12 +18,16 @@ Sin embargo en dicho código existen múltiples problemas que afecta a su correc
 Explain the bugs you found in the starter code:
 
 - **Bug 1**: What was the problem? Why did it happen? How did   you fix it?
--En primer lugar, el código inicial tenía un problema en la lógica del filtro a aplicar en el canal de números primos
+- En primer lugar, el código inicial tenía un problema en el uso del filtro a aplicar en el canal de números primos, pues no se hacía uso de él.
 - **Bug 2**: What was the second problem? Why did it happen? How did you fix it?
-- En segundo lugar, el oddChanel estaba configurado como un DirectChannel, lo que provocaba inconsistencias en el procesamiento de mensajes. 
+- En segundo lugar, el oddChanel estaba configurado como un DirectChannel, lo que provocaba inconsistencias en el procesamiento de mensajes, ya que
+- cada suscriptor recibía el mensaje de forma exclusiva. (Es decir, si había múltiples suscriptores, solo uno de ellos recibía el mensaje, unas veces uno, y otras el otro).
 - Por ello se ha modificado a un PublishSubscribeChannel para asegurar que todos los suscriptores recibieran los mensajes correctamente.
 - **Bug 3**: What was the third problem? Why did it happen? How did you fix it? 
-- Cuando se envía numero negativo, el @Gateway estaba apuntando al canal incorrecto (evenChannel en lugar de oddChannel).
+- Cuando se enviaba número negativo, el @Gateway estaba apuntando al canal incorrecto (evenChannel). La corrección llevada a cabo a sido redirigir su salida
+- al canal numberChannel, que es el canal de entrada principal del sistema.
+**Bug 4**:
+- Otro error encontrado fue que tanto el puller como el @Gateway no mandaban los datos al numberChannel(no existía aún), sino que el puller mandaba los datos directamente al router  y el @Gateway al evenChannel.
 - **(More bugs if you found them)**
 
 ---
@@ -33,8 +37,12 @@ Explain the bugs you found in the starter code:
 Write a few sentences about:
 
 - What you learned about Enterprise Integration Patterns
+- He podido aprender acerca del uso de los patrones EIP, los cuáles permiten diseñar flujos de mensajes claros entre componentes desacoplados haciendo uso de canales,
+- routers y gateways. Cada patrón tiene un propósito específico, como enrutar, transformar, publicar, etc... La clave está en combinarlos correctamente para que el sistema sea extensible
+- y fácil de mantener.
 - How Spring Integration works
-- What was challenging and how you solved it
+- What was challenging and how you solved it:
+- Lo más desafiante fue identificar los errores en el flujo de integración y entender cómo cada aplicar cada patrón EIP y su implementación.
 
 ---
 
@@ -52,14 +60,3 @@ Write a few sentences about:
 ## Additional Notes
 
 Any other comments or observations about the assignment.
-
-
-
-Componentes del esquema
-Item arriba izq. Es un puller que está ejecutando algo de manera repetida.
-El de abajo es justo su contrapar, un gateway, por el cual cualquier aplicacion pueded meter cualquier valor al sistema, lo que le pase por parámetros lo
-mete al canal.
-Si es par se va al canal par, el ultimo handler leerá el valor y hará algo con él.
-En el canal odd meteremos los impares, el canal de abajo es un canal pub/sub 
-UN canal por defecto es un canal directo, donde cuando se public el mensaje el se lleva la copia.
-En el canal pub/sub cada uno se lleva una copia del mensaje.
